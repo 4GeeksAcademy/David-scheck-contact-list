@@ -1,45 +1,112 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			contacts: [],
+			agenda: "davidscheck"
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
+			addContact: async (contact) => {
+				const agendaName = getStore().agenda;
+				try {
+					const response = await fetch(`https://playground.4geeks.com/contact/agendas/${agendaName}/contacts`, {
+						method: "POST",
+						body: JSON.stringify(contact),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					});
+					if (!response.ok) {
+						throw Error("Error creating contact");
+					}
+					const data = await response.json();
+					setStore({ contacts: [...getStore().contacts, data] });
+				} catch (error) {
+					console.error("Error adding contact:", error);
+				}
 			},
-			loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-				*/
+
+
+			getContacts: async () => {
+				const agendaName = getStore().agenda;
+				try {
+					const response = await fetch(`https://playground.4geeks.com/contact/agendas/${agendaName}`);
+						if (response.status === 404) {
+							await getActions().createAgenda();
+							await getActions().getContacts();
+						}
+						if (!response.ok) {
+							throw Error("Error fetching contacts");
+						}
+						const data = await response.json();
+						setStore({ contacts: data.contacts});
+				} catch (error) {
+					console.error("Error getting contacts:", error);
+				}
 			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
 
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
+			editContact: async (contact, id) => {
+				const agendaName = getStore().agenda;
+				try {
+					const response = await fetch(`https://playground.4geeks.com/contact/agendas/${agendaName}/contacts/${id}`, {
+						method: "PUT",
+						body: JSON.stringify(contact),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					});
+				if (response.ok) {
+					const actions = getActions();
+					actions.getContacts();
+				} else {
+					throw Error("Error updating contact");
+				} 
+			} catch (error) {
+					console.error("Error editing contact:", error);
+					throw error;
+				}
+			},
 
-				//reset the global store
-				setStore({ demo: demo });
-			}
-		}
+			createAgenda: async () => {
+				const agendaName = getStore().agenda;
+				try {
+					const response = await fetch(`https://playground.4geeks.com/contact/agendas/${agendaName}`, {
+						method: "POST",
+						body: JSON.stringify({}),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					});
+					if (response.ok) {
+						const newAgenda = await response.json();
+						console.log("agenda created;", newAgenda);
+					}
+				} catch (error) {
+					console.error("Error creating agenda:", error);
+				}
+			},
+
+			deleteContact: async (id) => {
+				const agendaName= getStore().agenda;
+				try {
+					const response = await fetch (`https://playground.4geeks.com/contact/agendas/${agendaName}/contacts/${id}`, {
+						method: "DELETE"
+					});
+					if (response.ok) {
+						getActions().getContacts();
+						const contactsUpdated = getStore().contacts.filter(contact => contact.id != id);
+						setStore({ contacts: contactsUpdated});
+					} else {
+						throw Error("Error deleting contact");
+					}
+				} catch (error) {
+					console.error("Error deleting contact:", error);
+				}
+			},
+		
+		},
 	};
 };
 
-export default getState;
+
+		export default getState;
