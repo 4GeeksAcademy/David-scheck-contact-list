@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import Modal from "./Modal";
+import Modal from "./Modal.jsx";
 
 const Contact = ({contact, onDelete}) => {
-    const [showModal, setShowModal] = useState(flase);
+    const [showModal, setShowModal] = useState(false);
 
     const handleDelete = () => {
         setShowModal(true);
@@ -20,9 +20,9 @@ const Contact = ({contact, onDelete}) => {
             <div className="card-body">
                 <div className="row">
                     <div className="col-2">
-                        <img src="https://cdn.icon-icons.com/icons2/2438/PNG/512/boy_avatar_icon_148455.png" classname="img-fluid rounded-circle" alt="Profile" />
+                    <img src="https://cdn.icon-icons.com/icons2/2438/PNG/512/boy_avatar_icon_148455.png" className="img-fluid rounded-circle" alt="Profile" />
                     </div>
-                    <div classname="col-10">
+                    <div className="col-10">
                         <h5 className="card-title">{contact.name}</h5>
                         <p className="card-text"><i className="fas fa-map-marker-alt"></i> {contact.address} </p>
                         <p className="card-text"><i className="fas fa-phone"></i> {contact.phone}</p>
@@ -34,7 +34,7 @@ const Contact = ({contact, onDelete}) => {
                     </div>
                 </div>
             </div>
-            <Modal show={showModal} on Close={() => setShowModal(false)} onConfirm={handleConfirmDelete} />
+            <Modal show={showModal} onClose={() => setShowModal(false)} onConfirm={handleConfirmDelete} />
         </div>
     );
 };

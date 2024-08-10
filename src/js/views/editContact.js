@@ -14,7 +14,7 @@ export const EditContact = () => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const params = usseParams();
+    const params = useParams();
     const contactId = parseInt(params.id); // Convert contactID to and integer
 
     useEffect(() => {
@@ -35,12 +35,21 @@ export const EditContact = () => {
         });
     };
 
+    const handleSubmit = async () => {
+        try {
+            await actions.editContact(edit, contactId);
+        } catch (error) {
+            console.error("Error updating contact:", error);
+            setError(error.message);
+        }
+    };
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
 
     if (error) {
-        return <div>Error: </div>;
+        return <div>Error: {error}</div>;
     }
 
     return (

@@ -29,5 +29,7 @@ const Modal = ({ show, onClose, onConfirm }) => {
 Modal.propTypes = {
     show: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    onConfirm: Proptypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
 };
+
+export default Modal;

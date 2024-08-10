@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../../styles/home.css";
 
 export const AddContact = () => {
-    const {actions} = useContext(Context);
+    const { actions } = useContext(Context);
     const [data, setData] = useState({});
     const navigate = useNavigate();
 
@@ -19,8 +19,7 @@ export const AddContact = () => {
     const handleSubmit = () => {
         actions.addContact(data);
         navigate("/");
-    
-};
+    };
 
     return (
         <div className="container">
@@ -35,7 +34,7 @@ export const AddContact = () => {
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="Email" className="form-label fw-bold">Email</label>
+                    <label htmlFor="Email" className="form-label fw-bold">Email Testing Update</label>
                     <input type="email" name="email" className="form-control" id="Email" placeholder="Enter email"
                         onChange={handleChange}
                     />

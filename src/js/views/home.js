@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import "../../styles/home.css";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
-import Contact from "../component/Contact";
+import Contact  from "../component/Contact.jsx";
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
